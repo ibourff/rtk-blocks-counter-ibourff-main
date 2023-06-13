@@ -27,7 +27,7 @@ begin
     if(~nrst)
         count <= 0;
     else
-        count <= next_count;
+        count <= next_count ;
 end 
 
 always_comb
