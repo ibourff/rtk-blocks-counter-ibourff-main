@@ -1,0 +1,310 @@
+
+ /----------------------------------------------------------------------------\
+ |                                                                            |
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |                                                                            |
+ |  Copyright (C) 2012 - 2019  Clifford Wolf <clifford@clifford.at>           |
+ |                                                                            |
+ |  Permission to use, copy, modify, and/or distribute this software for any  |
+ |  purpose with or without fee is hereby granted, provided that the above    |
+ |  copyright notice and this permission notice appear in all copies.         |
+ |                                                                            |
+ |  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES  |
+ |  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF          |
+ |  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR   |
+ |  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES    |
+ |  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN     |
+ |  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF   |
+ |  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.            |
+ |                                                                            |
+ \----------------------------------------------------------------------------/
+
+ Yosys 0.9 (git sha1 1979e0b)
+
+
+-- Running command `read_verilog -sv source/counter_4.sv source/counter.sv; hierarchy -check -top counter_4; proc; opt; fsm; opt; memory; opt; show' --
+
+1. Executing Verilog-2005 frontend: source/counter_4.sv
+Parsing SystemVerilog input from `source/counter_4.sv' to AST representation.
+Generating RTLIL representation for module `\counter_4'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: source/counter.sv
+Parsing SystemVerilog input from `source/counter.sv' to AST representation.
+Generating RTLIL representation for module `\counter'.
+Successfully finished Verilog frontend.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \counter_4
+Used module:     \counter
+
+3.2. Executing AST frontend in derive mode using pre-parsed AST for module `\counter'.
+Parameter \N = 4
+Generating RTLIL representation for module `$paramod\counter\N=4'.
+
+3.3. Analyzing design hierarchy..
+Top module:  \counter_4
+Used module:     $paramod\counter\N=4
+
+3.4. Analyzing design hierarchy..
+Top module:  \counter_4
+Used module:     $paramod\counter\N=4
+Removing unused module `\counter'.
+Removed 1 unused modules.
+
+4. Executing PROC pass (convert processes to netlists).
+
+4.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 5 switch rules as full_case in process $proc$source/counter.sv:33$13 in module $paramod\counter\N=4.
+Marked 1 switch rules as full_case in process $proc$source/counter.sv:25$11 in module $paramod\counter\N=4.
+Removed a total of 0 dead cases.
+
+4.3. Executing PROC_INIT pass (extract init attributes).
+
+4.4. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \nrst in `$paramod\counter\N=4.$proc$source/counter.sv:25$11'.
+
+4.5. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod\counter\N=4.$proc$source/counter.sv:33$13'.
+     1/7: $4\next_count[3:0]
+     2/7: $3\next_count[3:0]
+     3/7: $2\next_count[3:0]
+     4/7: $1\next_count[3:0]
+     5/7: $1\at_max[0:0]
+     6/7: $0\next_count[3:0]
+     7/7: $0\at_max[0:0]
+Creating decoders for process `$paramod\counter\N=4.$proc$source/counter.sv:25$11'.
+     1/1: $0\count[3:0]
+
+4.6. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod\counter\N=4.\at_max' from process `$paramod\counter\N=4.$proc$source/counter.sv:33$13'.
+No latch inferred for signal `$paramod\counter\N=4.\next_count' from process `$paramod\counter\N=4.$proc$source/counter.sv:33$13'.
+
+4.7. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod\counter\N=4.\count' using process `$paramod\counter\N=4.$proc$source/counter.sv:25$11'.
+  created $adff cell `$procdff$54' with positive edge clock and negative level reset.
+
+4.8. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 5 empty switches in `$paramod\counter\N=4.$proc$source/counter.sv:33$13'.
+Removing empty process `$paramod\counter\N=4.$proc$source/counter.sv:33$13'.
+Removing empty process `$paramod\counter\N=4.$proc$source/counter.sv:25$11'.
+Cleaned up 5 empty switches.
+
+5. Executing OPT pass (performing simple optimizations).
+
+5.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+5.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+<suppressed ~6 debug messages>
+Finding identical cells in module `\counter_4'.
+Removed a total of 2 cells.
+
+5.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\counter\N=4..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+    dead port 1/2 on $mux $procmux$46.
+    dead port 1/2 on $mux $procmux$40.
+    dead port 2/2 on $mux $procmux$37.
+    dead port 1/2 on $mux $procmux$31.
+    dead port 2/2 on $mux $procmux$28.
+    dead port 1/2 on $mux $procmux$26.
+Running muxtree optimizer on module \counter_4..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 6 multiplexer ports.
+<suppressed ~2 debug messages>
+
+5.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\counter\N=4.
+  Optimizing cells in module \counter_4.
+Performed a total of 0 changes.
+
+5.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+5.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+5.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+Removed 1 unused cells and 30 unused wires.
+<suppressed ~2 debug messages>
+
+5.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+5.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+5.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\counter\N=4..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \counter_4..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~2 debug messages>
+
+5.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\counter\N=4.
+  Optimizing cells in module \counter_4.
+Performed a total of 0 changes.
+
+5.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+5.13. Executing OPT_RMDFF pass (remove dff with constant values).
+
+5.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+5.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+5.16. Finished OPT passes. (There is nothing left to do.)
+
+6. Executing FSM pass (extract and optimize FSM).
+
+6.1. Executing FSM_DETECT pass (finding FSMs in design).
+
+6.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+6.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+6.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+6.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+6.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+6.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+6.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+7. Executing OPT pass (performing simple optimizations).
+
+7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\counter\N=4..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \counter_4..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~2 debug messages>
+
+7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\counter\N=4.
+  Optimizing cells in module \counter_4.
+Performed a total of 0 changes.
+
+7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+7.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+7.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+7.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+7.9. Finished OPT passes. (There is nothing left to do.)
+
+8. Executing MEMORY pass.
+
+8.1. Executing MEMORY_DFF pass (merging $dff cells to $memrd and $memwr).
+
+8.2. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+8.3. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+8.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+8.5. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+8.6. Executing MEMORY_MAP pass (converting $mem cells to logic and flip-flops).
+
+9. Executing OPT pass (performing simple optimizations).
+
+9.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+9.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+9.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module $paramod\counter\N=4..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module \counter_4..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+<suppressed ~2 debug messages>
+
+9.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module $paramod\counter\N=4.
+  Optimizing cells in module \counter_4.
+Performed a total of 0 changes.
+
+9.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `$paramod\counter\N=4'.
+Finding identical cells in module `\counter_4'.
+Removed a total of 0 cells.
+
+9.6. Executing OPT_RMDFF pass (remove dff with constant values).
+
+9.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module $paramod\counter\N=4..
+Finding unused cells or wires in module \counter_4..
+
+9.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module $paramod\counter\N=4.
+Optimizing module counter_4.
+
+9.9. Finished OPT passes. (There is nothing left to do.)
+
+10. Generating Graphviz representation of design.

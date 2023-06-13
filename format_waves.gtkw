@@ -1,0 +1,31 @@
+[*]
+[*] GTKWave Analyzer v3.3.107 (w)1999-2020 BSI
+[*] Mon Jun 12 14:35:39 2023
+[*]
+[dumpfile] "/Users/fahadaloufi/Desktop/STARS/rtl-blocks-counter/dump.vcd"
+[dumpfile_mtime] "Mon Jun 12 14:33:35 2023"
+[dumpfile_size] 5089
+[savefile] "/Users/fahadaloufi/Desktop/STARS/rtl-blocks-counter/format_waves.gtkw"
+[timestart] 231900
+[size] 1512 945
+[pos] -178 -2
+*-15.000000 375500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 193
+[signals_width] 245
+[sst_expanded] 1
+[sst_vpaned_height] 289
+@420
+tb_counter.tb_test_number
+@820
+tb_counter.tb_test_name[1024:0]
+@28
+tb_counter.tb_clk
+tb_counter.tb_nrst
+tb_counter.tb_wrap
+tb_counter.tb_enable
+@22
+tb_counter.tb_count_4[3:0]
+@29
+tb_counter.tb_at_max_4
+[pattern_trace] 1
+[pattern_trace] 0
